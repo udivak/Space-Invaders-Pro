@@ -203,7 +203,7 @@ def main():
 
         if len(enemies) == 0:
             level += 1
-            wave_length += 5
+            wave_length += 2
             if level > 1:
                 player.health += 30
             for i in range(wave_length):
