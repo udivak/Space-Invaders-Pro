@@ -44,7 +44,7 @@ class Laser():
 
 
 class Ship:
-    COOLDOWN = 30
+    COOLDOWN = 17
     def __init__(self, x, y, health = 100):
         self.x = x
         self.y = y
@@ -96,6 +96,7 @@ class Player(Ship):
         self.laser_img = YELLOW_Laser
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
+        self.score = 0
 
     def move_lasers(self, vel, objs):
         self.cooldown()
@@ -106,6 +107,7 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
+                        self.score += 1
                         objs.remove(obj)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
@@ -163,6 +165,7 @@ def main():
     enemy_vel = 1
     laser_vel = 6.5
 
+
     clock = pygame.time.Clock()
 
     def redraw_window():
@@ -171,6 +174,8 @@ def main():
         lives_label = main_font.render(f"Lives : {lives}", 1, (255, 0, 0))
         level_label = main_font.render(f"Level : {level}", 1,(255, 255, 255))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
+        score_label = main_font.render(f"Score : {player.score}", 1, (0,255,0))
+        WIN.blit(score_label, (WIDTH / 2 - score_label.get_width() / 2 - 10, 15))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
 
@@ -203,9 +208,12 @@ def main():
 
         if len(enemies) == 0:
             level += 1
-            wave_length += 2
+            wave_length += 3
             if level > 1:
-                player.health += 30
+                if player.health < 100:
+                    if player.health >= 70:
+                        player.health = 100
+                    else: player.health += 30
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['red', 'blue', 'green']))
@@ -246,10 +254,12 @@ def main_menu():
     run = True
     while run:
         WIN.blit(BG, (0, 0))
-        title_label1 = title_font.render("Welcome to Space Invaders Pro", 1, (255,255,255))
+        title_label1 = title_font.render("Welcome to Space Invaders Pro !!!", 1, (255,255,255))
         title_label2 = title_font.render("Press the mouse to begin...", 1, (255,255,255))
+        title_label3 = title_font.render("~ Use arrows to move, Spacebar to shoot ~", 1, (255,255,255))
+        WIN.blit(title_label3, (WIDTH / 2 - title_label3.get_width() / 2, 400))
         WIN.blit(title_label1, (WIDTH/2 - title_label1.get_width()/2, 300))
-        WIN.blit(title_label2, (WIDTH/2 - title_label1.get_width() / 2 + 30, 400))
+        WIN.blit(title_label2, (WIDTH/2 - title_label1.get_width() / 2 + 30, 500))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
