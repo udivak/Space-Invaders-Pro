@@ -89,6 +89,12 @@ class Ship:
             self.lasers.append(laser)
             self.cool_down_counter = 1
 
+        if self.cooldown_meter < 100 :
+            self.cooldown_meter += 0.7
+
+
+
+
 class Player(Ship):
     def __init__(self, x, y, health = 100):
         super().__init__(x, y, health)
@@ -97,6 +103,8 @@ class Player(Ship):
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
         self.score = 0
+        self.cooldown_meter = 0
+
 
     def move_lasers(self, vel, objs):
         self.cooldown()
@@ -119,9 +127,13 @@ class Player(Ship):
                          (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() *
                           (self.health/self.max_health), 10))
 
+    def shooting_meter(self, window):
+        pygame.draw.rect(window, (255, 125, 0), (self.x, self.y + self.ship_img.get_height() + 20,
+                                                    self.cooldown_meter, 7))
     def draw(self, window):
         super().draw(window)
         self.healthbar(window)
+        self.shooting_meter(window)
 
 
 
@@ -161,9 +173,10 @@ def main():
     lost = False
     lost_count = 0
     enemies = []
-    wave_length = 6
+    wave_length = 10
     enemy_vel = 1
     laser_vel = 6.5
+
 
 
     clock = pygame.time.Clock()
@@ -208,7 +221,7 @@ def main():
 
         if len(enemies) == 0:
             level += 1
-            wave_length += 3
+            wave_length += 5
             if level > 1:
                 if player.health < 100:
                     if player.health >= 70:
@@ -233,7 +246,12 @@ def main():
         if keys[pygame.K_LEFT] and player.x - player_vel > 0: # left
             player.x -= player_vel
         if keys[pygame.K_SPACE]:
-            player.shoot()
+            if player.cooldown_meter < 100:
+                player.shoot()
+        if not keys[pygame.K_SPACE]:
+            if player.cooldown_meter >= 0:
+                player.cooldown_meter -= 0.7
+
 
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
