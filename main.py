@@ -66,7 +66,7 @@ class Ship:
             if laser.off_screen(HEIGHT):
                 self.lasers.remove(laser)
             elif laser.collision(obj):
-                obj.health -= 15
+                obj.health -= 10
                 self.lasers.remove(laser)
 
     def cooldown(self):
@@ -198,7 +198,7 @@ def main():
         player.draw(WIN)
 
         if lost:
-            lost_label = lost_font.render("You Lost !!!", 1, (0,50,255))
+            lost_label = lost_font.render("Game Over !!!", 1, (0,50,255))
             WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350))
 
         pygame.display.update()
@@ -221,12 +221,11 @@ def main():
 
         if len(enemies) == 0:
             level += 1
-            wave_length += 5
+            wave_length += 2
             if level > 1:
-                if player.health < 100:
-                    if player.health >= 70:
-                        player.health = 100
-                    else: player.health += 30
+                if player.health < 100 and player.health >= 70:
+                    player.health = 100
+                else: player.health += 30
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['red', 'blue', 'green']))
@@ -259,7 +258,7 @@ def main():
             if random.randrange(0, 2*60) == 1:
                 enemy.shoot()
             if collide(enemy, player):
-                player.health -= 5
+                player.health -= 10
                 enemies.remove(enemy)
             elif enemy.y + enemy.get_height > HEIGHT:
                 lives -= 1
