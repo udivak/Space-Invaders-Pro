@@ -225,7 +225,8 @@ def main():
             if level > 1:
                 if player.health < 100 and player.health >= 70:
                     player.health = 100
-                else: player.health += 30
+                if player.health < 70:
+                    player.health += 30
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['red', 'blue', 'green']))
