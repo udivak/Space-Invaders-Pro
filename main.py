@@ -3,9 +3,11 @@ import os
 import time
 import random
 
+from Classes import *
+
 pygame.font.init()
 
-WIDTH, HEIGHT = 900, 750
+'''WIDTH, HEIGHT = 900, 750
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Space Invaders Pro")
 
@@ -23,10 +25,10 @@ YELLOW_Laser = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 # Background
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
 # Packages
-HP_PACK = pygame.image.load(os.path.join("assets", "healthpack.jpeg"))
+HP_PACK = pygame.image.load(os.path.join("assets", "healthpack.jpeg"))'''
 
 
-class Laser():
+'''class Laser():
     def __init__(self, x, y, img):
         self.x = x
         self.y = y
@@ -43,10 +45,10 @@ class Laser():
         return not (self.y <= height and self.y >= 0)
 
     def collision(self, obj):
-        return collide(self, obj)
+        return collide(self, obj)'''
 
 
-class Ship:
+'''class Ship:
     COOLDOWN = 17
 
     def __init__(self, x, y, health=100):
@@ -182,58 +184,58 @@ class Enemy(Ship):
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
     offset_y = obj2.y - obj1.y
-    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None'''
 
+'''def collide(obj1, obj2):
+    offset_x = obj2.x - obj1.x
+    offset_y = obj2.y - obj1.y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None'''
 
 def main():
     run = True
     FPS = 60
     level = 0
-    lives = 5
+    invades = 5
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
-    player_vel = 7
-    player = Player(380, 600)
+    player_vel = 7.2
+    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80)
     lost = False
     lost_count = 0
     enemies = []
     wave_length = 10
     enemy_vel = 1
-    laser_vel = 6.5
+    laser_vel = 8.5
     packages = []
-
+    boss = None
+    boss_flag = False
     clock = pygame.time.Clock()
 
     def redraw_window():
         WIN.blit(BG, (0, 0))
         # draw text
-        lives_label = main_font.render(f"Lives : {lives}", 1, (255, 0, 0))
+        lives_label = main_font.render(f"Invades : {invades}", 1, (255, 0, 0))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
         score_label = main_font.render(f"Score : {player.score}", 1, (0, 255, 0))
         WIN.blit(score_label, (WIDTH / 2 - score_label.get_width() / 2 - 10, 15))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
-
         for enemy in enemies:
             enemy.draw(WIN)
-
         for pack in packages:
             pack.draw(WIN)
-
         player.draw(WIN)
-
         if lost:
             lost_label = lost_font.render("Game Over !!!", 1, (0, 50, 255))
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
-
         pygame.display.update()
 
     while run:
         clock.tick(FPS)
         redraw_window()
 
-        if lives <= 0 or player.health <= 0:
+        if invades <= 0 or player.health <= 0:
             lost = True
             lost_count += 1
 
@@ -243,8 +245,10 @@ def main():
             else:
                 continue
 
-        if len(enemies) == 0:
+        if len(enemies) == 0: # finished level
             level += 1
+            if level > 1 and invades < 5:
+                invades += 1
             wave_length += 2
             if level > 1:
                 if player.health < 100 and player.health >= 80:
@@ -255,6 +259,10 @@ def main():
                 enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['red', 'blue', 'green']))
                 enemies.append(enemy)
+            if level % 2 == 1:
+                boss = Boss(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
+                            random.choice(['grey']))
+                enemies.append(boss)
 
         if len(packages) == 0:
             package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
@@ -279,7 +287,7 @@ def main():
                 player.shoot()
         if not keys[pygame.K_SPACE]:
             if player.cooldown_meter >= 0:
-                player.cooldown_meter -= 0.7
+                player.cooldown_meter -= 0.60
 
         for pack in packages:
             pack.move(1)
@@ -292,11 +300,11 @@ def main():
             enemy.move_lasers(laser_vel, player)
             if random.randrange(0, 2 * 60) == 1:
                 enemy.shoot()
-            if collide(enemy, player):
+            if collide(enemy, player) and isinstance(enemy, Enemy):
                 player.health -= 10
                 enemies.remove(enemy)
-            elif enemy.y + enemy.get_height > HEIGHT:
-                lives -= 1
+            if isinstance(enemy, Enemy) and enemy.y + enemy.get_height > HEIGHT:
+                invades -= 1
                 enemies.remove(enemy)
 
         player.move_lasers(-laser_vel, enemies)
