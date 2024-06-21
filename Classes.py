@@ -11,9 +11,9 @@ pygame.display.set_caption("Space Invaders Pro")
 
 # Load images
 # Enemies
-RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png"))
-GREEN_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png"))
-BLUE_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png"))
+RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - red.png"))
+GREEN_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - green.png"))
+BLUE_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - blue.png"))
 # Player Ship
 PLAYER_SHIP = pygame.image.load(os.path.join("assets", "player.png"))
 # Boss Ship
@@ -128,7 +128,7 @@ class Player(Ship):
     def healthbar(self, window):
         pygame.draw.rect(window, (255, 0, 0),
                          (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
-        pygame.draw.rect(window, (0, 255, 100),
+        pygame.draw.rect(window, (0, 255, 150),
                          (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() *
                           (self.health / self.max_health), 10))
     def shooting_meter(self, window):
@@ -156,6 +156,7 @@ class Enemy(Ship):
             self.lasers.append(laser)
             self.cool_down_counter = 1
 
+# Boss
 class Boss(Ship):
     COLOR_MAP = {'grey': (BOSS_GREY, BOSS_PURPLE_LASER)}
     def __init__(self, x, y, color, health = 300):

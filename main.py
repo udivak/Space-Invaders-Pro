@@ -33,7 +33,7 @@ def main():
         lives_label = main_font.render(f"Invades : {invades}", 1, (255, 0, 0))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
-        score_label = main_font.render(f"Score : {player.score}", 1, (0, 255, 0))
+        score_label = main_font.render(f"Score : {player.score}", 1, (50, 255, 200))
         WIN.blit(score_label, (WIDTH / 2 - score_label.get_width() / 2 - 10, 15))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
@@ -43,7 +43,7 @@ def main():
             pack.draw(WIN)
         player.draw(WIN)
         if lost:
-            lost_label = lost_font.render("Game Over !!!", 1, (0, 50, 255))
+            lost_label = lost_font.render("Game Over !!!", 1, (0, 150, 255))
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
         pygame.display.update()
 
@@ -61,7 +61,7 @@ def main():
             else:
                 continue
 
-        if len(enemies) == 0: # finished level
+        if len(enemies) == 0:   # finished level
             level += 1
             if level > 1 and invades < 5:
                 invades += 1
