@@ -6,7 +6,6 @@ from Classes import *
 
 pygame.font.init()
 
-
 def main():
     run = True
     FPS = 60
@@ -20,20 +19,20 @@ def main():
     lost_count = 0
     enemies = []
     wave_length = 10
-    enemy_vel = 1
+    enemy_vel, package_vel = 1, 1.15
+    boss_vel = 2
     laser_vel = 8.5
     packages = []
     boss = None
-    boss_flag = False
+    level_player_collide_triple_shot = 0
     clock = pygame.time.Clock()
-
     def redraw_window():
         WIN.blit(BG, (0, 0))
         # draw text
         lives_label = main_font.render(f"Invades : {invades}", 1, (255, 0, 0))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
-        score_label = main_font.render(f"Score : {player.score}", 1, (50, 255, 200))
+        score_label = main_font.render(f"Score : {player.score}", 1, (0, 255, 170))
         WIN.blit(score_label, (WIDTH / 2 - score_label.get_width() / 2 - 10, 15))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
@@ -56,7 +55,7 @@ def main():
             lost_count += 1
 
         if lost:
-            if lost_count > FPS * 3:
+            if lost_count > FPS * 2:
                 run = False
             else:
                 continue
@@ -69,7 +68,7 @@ def main():
             if level > 1:
                 if player.health < 100 and player.health >= 80:
                     player.health = 100
-                if player.health < 70:
+                if player.health < 80:
                     player.health += 20
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
@@ -79,10 +78,15 @@ def main():
                 boss = Boss(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                             random.choice(['grey']))
                 enemies.append(boss)
+            if player.pack_flag['triple_shot']:
+                player.triple_shot_counter += 1
+                if player.triple_shot_counter > 1:
+                    player.triple_shot_counter = 0
+                    player.pack_flag['triple_shot'] = False
 
-        if len(packages) == 0:
+        if len(packages) <= 1 and level > 2 and level % 2 == 1:
             package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
-                              random.choice(['hp']))
+                              random.choice(['hp', 'triple_laser']))
             packages.append(package)
 
         for event in pygame.event.get():
@@ -99,32 +103,50 @@ def main():
         if keys[pygame.K_LEFT] and player.x - player_vel > 0:  # left
             player.x -= player_vel
         if keys[pygame.K_SPACE]:
-            if player.cooldown_meter < 100:
-                player.shoot()
+            if player.cooldown_meter < player.ship_img.get_width():
+                if player.pack_flag['triple_shot']:
+                    player.triple_shot()
+                else:
+                    player.shoot()
         if not keys[pygame.K_SPACE]:
             if player.cooldown_meter >= 0:
-                player.cooldown_meter -= 0.60
+                player.cooldown_meter -= 0.6
+        # skip level - testing funcionality
+        if keys[pygame.K_q]:
+            enemies.clear()
+            level = 2
+        if keys[pygame.K_t]:
+            level+=1
 
         for pack in packages:
-            pack.move(1)
+            pack.move(package_vel)
             if collide(pack, player):
-                player.health = 100
-                packages.remove(pack)
+                if pack.type == 'hp':
+                    if player.health < 100:
+                        player.health = 100
+                        packages.remove(pack)
+                if not player.pack_flag['triple_shot']:
+                    if pack.type == 'triple_laser':
+                        player.pack_flag['triple_shot'] = True
+                        packages.remove(pack)
 
         for enemy in enemies[:]:
-            enemy.move(enemy_vel)
+            if isinstance(enemy, Boss):
+                enemy.move(boss_vel)
+            else:
+                enemy.move(enemy_vel)
             enemy.move_lasers(laser_vel, player)
             if random.randrange(0, 2 * 60) == 1:
                 enemy.shoot()
-            if collide(enemy, player) and isinstance(enemy, Enemy):
-                player.health -= 10
-                enemies.remove(enemy)
+            if collide(enemy, player):
+                if isinstance(enemy, Enemy):
+                    player.health -= 10
+                    enemies.remove(enemy)
+                else: lost = True
             if isinstance(enemy, Enemy) and enemy.y + enemy.get_height > HEIGHT:
                 invades -= 1
                 enemies.remove(enemy)
-
         player.move_lasers(-laser_vel, enemies)
-
 
 def main_menu():
     title_font = pygame.font.SysFont("comicsans", 30)
@@ -144,6 +166,5 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 main()
     pygame.quit()
-
 
 main_menu()
