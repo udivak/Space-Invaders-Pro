@@ -79,14 +79,20 @@ def main():
                             random.choice(['grey']))
                 enemies.append(boss)
             if player.pack_flag['triple_shot']:
-                player.triple_shot_counter += 1
-                if player.triple_shot_counter > 1:
-                    player.triple_shot_counter = 0
+                player.pack_duration['triple_shot'] += 1
+                if player.pack_duration['triple_shot'] > 1:
+                    player.pack_duration['triple_shot'] = 0
                     player.pack_flag['triple_shot'] = False
+            if player.pack_flag['shield']:
+                player.pack_duration['shield'] += 1
+                if player.pack_duration['shield'] > 1:
+                    player.pack_duration['shield'] = 0
+                    player.pack_flag['shield'] = False
 
-        if len(packages) <= 1 and level > 2 and level % 2 == 1:
+        if len(packages) <= 3 and level > 2: #'''and level % 2 == 1'''
+        #if True:
             package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
-                              random.choice(['hp', 'triple_laser']))
+                              random.choice(['hp', 'triple_laser', 'shield']))
             packages.append(package)
 
         for event in pygame.event.get():
@@ -129,6 +135,12 @@ def main():
                     if pack.type == 'triple_laser':
                         player.pack_flag['triple_shot'] = True
                         packages.remove(pack)
+                if not player.pack_flag['shield']:
+                    if pack.type == 'shield':
+                        player.pack_flag['shield'] = True
+                        packages.remove(pack)
+            if pack.y + pack.get_height > HEIGHT:
+                packages.remove(pack)
 
         for enemy in enemies[:]:
             if isinstance(enemy, Boss):

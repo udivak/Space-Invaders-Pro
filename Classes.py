@@ -31,6 +31,8 @@ BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background
 # Packages
 HP_PACK = pygame.image.load(os.path.join("assets", "healthpack.jpeg"))
 TRIPLE_LASER = pygame.image.load(os.path.join("assets", "laserpack.png"))
+SHIELD_PACK = pygame.image.load(os.path.join("assets", "shieldpack.png"))
+SHIELD_BUBBLE = pygame.image.load(os.path.join("assets", "shield.png"))
 # # #
 
 # Laser :
@@ -79,7 +81,8 @@ class Ship:
             if laser.off_screen(HEIGHT):
                 self.lasers.remove(laser)
             elif laser.collision(obj):
-                obj.health -= 10
+                if not obj.pack_flag['shield']:
+                    obj.health -= 10
                 self.lasers.remove(laser)
     def cooldown(self):
         if self.cool_down_counter >= self.COOLDOWN:
@@ -103,7 +106,8 @@ class Player(Ship):
         self.max_health = health
         self.score = 0
         self.cooldown_meter = 0
-        self.pack_flag = {'hp': False, 'triple_shot': False}
+        self.pack_flag = {'triple_shot': False, 'shield': False}
+        self.pack_duration = {'triple_shot': 0, 'shield': 0}
         self.triple_shot_counter = 0
     def shoot(self):
         '''if self.cool_down_counter == 0:
@@ -154,9 +158,17 @@ class Player(Ship):
         pygame.draw.rect(window, (255, 125, 0), (self.x, self.y + self.ship_img.get_height() + 20,
                                                             self.cooldown_meter, 7))
     def draw(self, window):
+        if self.pack_flag['shield']:
+            #window.blit(SHIELD_BUBBLE.subsurface(pygame.draw.rect(window, (0,0,0,), (self.x, self.y,self.ship_img.get_height(),0))),
+            #            (self.x -(SHIELD_BUBBLE.get_width() // 2) + (self.ship_img.get_width() // 2),
+             #            self.y -(SHIELD_BUBBLE.get_height() // 2) + (self.ship_img.get_height() // 2)))
+            pygame.draw.circle(window, (169, 169, 169, 0),
+                               (self.x + self.ship_img.get_width() // 2 ,self.y + self.ship_img.get_height() // 2),
+                               60.5)
         super().draw(window)
         self.healthbar(window)
         self.shooting_meter(window)
+
 
 # Enemy
 class Enemy(Ship):
@@ -233,7 +245,7 @@ class Boss(Ship):
 # Package :
 class Package:
     package_type = {
-        'hp': HP_PACK, 'triple_laser' : TRIPLE_LASER
+        'hp': HP_PACK, 'triple_laser' : TRIPLE_LASER, 'shield' : SHIELD_PACK
     }
     def __init__(self, x, y, type):
         self.x = x
@@ -247,6 +259,9 @@ class Package:
         window.blit(self.img, (self.x, self.y))
     def move(self, vel):
         self.y += vel
+    @property
+    def get_height(self):
+        return self.img.get_height()
 # # # Class Package # # #
 
 
