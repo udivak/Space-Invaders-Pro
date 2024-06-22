@@ -173,8 +173,6 @@ class Player(Ship):
         super().draw(window)
         self.healthbar(window)
         self.shooting_meter(window)
-
-
 # Enemy
 class Enemy(Ship):
     COLOR_MAP = {'red': (RED_SPACE_SHIP, ENEMY_RED_LASER),
@@ -233,7 +231,8 @@ class Boss(Ship):
         self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())
     def shoot(self):
         if self.cool_down_counter == 0:
-            laser = Laser(self.x, self.y, self.laser_img)
+            laser = Laser(self.x + self.ship_img.get_width() / 4, self.y + self.ship_img.get_height() / 2 + 40,
+                          self.laser_img)
             self.lasers.append(laser)
             self.cool_down_counter = 1
     def healthbar(self, window):

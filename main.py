@@ -8,11 +8,11 @@ pygame.init()
 pygame.font.init()
 #background_music = pygame.mixer.music.play(TRANCE_LOOP)
 pygame.mixer.music.set_volume(0.06)
-pygame.mixer.music.play(-1)
+
 def main():
     run = True
     FPS = 60
-    level = 0
+    level = 0 #10
     invades = 5
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
@@ -21,7 +21,7 @@ def main():
     lost = False
     lost_count = 0
     enemies = []
-    wave_length = 10
+    wave_length = 20 #10
     enemy_vel, package_vel = 1, 1.15
     boss_vel = 2
     laser_vel = 8.5
@@ -92,7 +92,7 @@ def main():
                     player.pack_duration['shield'] = 0
                     player.pack_flag['shield'] = False
 
-        if len(packages) <= 3 and level > 2: #'''and level % 2 == 1'''
+        if len(packages) == 0 and level > 2 and level % 2 == 1:
         #if True:
             package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['hp', 'triple_laser', 'shield']))
@@ -179,6 +179,7 @@ def main_menu():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                pygame.mixer.music.play(-1)
                 main()
     pygame.quit()
 
