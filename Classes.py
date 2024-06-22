@@ -4,13 +4,15 @@ import os
 import time
 import random
 import pygame.math
-
+pygame.mixer.init()
 # Assets :
 #WIDTH, HEIGHT = 900, 750
 WIDTH, HEIGHT = 1000, 850
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Space Invaders Pro")
-
+# Sounds
+LASER_SOUND = pygame.mixer.Sound(os.path.join("sounds", "laser-shot.mp3"))
+LASER_SOUND.set_volume(0.085)
+TRANCE_LOOP = pygame.mixer.music.load(os.path.join("sounds", "trance-loop.mp3"))
 # Load images
 # Enemies
 RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - red.png"))
@@ -118,6 +120,8 @@ class Player(Ship):
             self.cooldown_meter += 0.35
             if self.cool_down_counter == 0:
                 laser = Laser(self.x + 16, self.y - 45, self.laser_img)
+                LASER_SOUND.play()
+                #LASER_SOUND.play(0, 0,1)
                 self.lasers.append(laser)
                 self.cool_down_counter = 1
     def triple_shot(self):
@@ -127,6 +131,7 @@ class Player(Ship):
             laser1 = Laser(self.x + 16, self.y - 45, self.laser_img, True)
             laser2 = Laser(self.x + 16, self.y - 45, self.laser_img)            # Default direcion
             laser3 = Laser(self.x + 16, self.y - 45, self.laser_img, True, True)
+            LASER_SOUND.play()
             self.lasers.extend([laser1, laser2, laser3])
             self.cool_down_counter = 1
     def move_lasers(self, vel, enemies):
@@ -139,8 +144,8 @@ class Player(Ship):
                 for obj in enemies:
                     if laser.collision(obj):
                         if isinstance(obj, Boss):
-                            if obj.health >= 23:
-                                obj.health -= 23
+                            if obj.health >= 28:
+                                obj.health -= 28
                             else:
                                 enemies.remove(obj)
                         else:

@@ -4,8 +4,11 @@ import time
 import random
 from Classes import *
 
+pygame.init()
 pygame.font.init()
-
+#background_music = pygame.mixer.music.play(TRANCE_LOOP)
+pygame.mixer.music.set_volume(0.06)
+pygame.mixer.music.play(-1)
 def main():
     run = True
     FPS = 60
