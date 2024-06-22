@@ -1,9 +1,9 @@
-# Ships Classes - Ship, Player, Enemy
 import pygame
+import pygame.math
+import math
 import os
 import time
 import random
-import pygame.math
 pygame.mixer.init()
 # Assets :
 #WIDTH, HEIGHT = 900, 750
@@ -199,6 +199,10 @@ class Boss(Ship):
         self.ship_img, self.laser_img = self.COLOR_MAP[color] # -> color
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
+
+        # trying 8 figure movement
+
+
     def move(self, vel):    #fix boss moving mechanism
         '''if self.y + self.ship_img.get_height() > HEIGHT:
             self.y = 400
@@ -229,6 +233,8 @@ class Boss(Ship):
         # Ensure the boss stays within the window boundaries
         self.x = min(max(self.x, 0), WIDTH - self.ship_img.get_width())
         self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())
+
+
     def shoot(self):
         if self.cool_down_counter == 0:
             laser = Laser(self.x + self.ship_img.get_width() / 4, self.y + self.ship_img.get_height() / 2 + 40,

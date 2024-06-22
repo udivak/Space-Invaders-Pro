@@ -1,7 +1,3 @@
-import pygame
-import os
-import time
-import random
 from Classes import *
 
 pygame.init()
@@ -53,12 +49,12 @@ def main():
         clock.tick(FPS)
         redraw_window()
 
-        if invades <= 0 or player.health <= 0:
+        if invades <= 0 or player.health <= 0 or lost:
             lost = True
             lost_count += 1
 
         if lost:
-            if lost_count > FPS * 2:
+            if lost_count >= FPS * 2:
                 run = False
             else:
                 continue
@@ -181,6 +177,8 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pygame.mixer.music.play(-1)
                 main()
+                break
+
     pygame.quit()
 
 main_menu()
