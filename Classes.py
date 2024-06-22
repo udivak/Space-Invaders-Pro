@@ -233,8 +233,6 @@ class Boss(Ship):
         # Ensure the boss stays within the window boundaries
         self.x = min(max(self.x, 0), WIDTH - self.ship_img.get_width())
         self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())
-
-
     def shoot(self):
         if self.cool_down_counter == 0:
             laser = Laser(self.x + self.ship_img.get_width() / 4, self.y + self.ship_img.get_height() / 2 + 40,
@@ -273,7 +271,6 @@ class Package:
     def get_height(self):
         return self.img.get_height()
 # # # Class Package # # #
-
 
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
