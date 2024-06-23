@@ -13,6 +13,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 LASER_SOUND = pygame.mixer.Sound(os.path.join("sounds", "laser-shot.mp3"))
 LASER_SOUND.set_volume(0.085)
 TRANCE_LOOP = pygame.mixer.music.load(os.path.join("sounds", "trance-loop.mp3"))
+BOSS_EXPLOSION = pygame.mixer.Sound(os.path.join("sounds", "boss-explosion.mp3"))
 # Load images
 # Enemies
 RED_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - red.png"))
@@ -147,6 +148,7 @@ class Player(Ship):
                             if obj.health >= 28:
                                 obj.health -= 28
                             else:
+                                BOSS_EXPLOSION.play()
                                 enemies.remove(obj)
                         else:
                             self.score += 1

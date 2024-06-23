@@ -19,7 +19,7 @@ def main():
     enemies = []
     wave_length = 20 #10
     enemy_vel, package_vel = 1, 1.15
-    boss_vel = 2
+    boss_vel = 2.5
     laser_vel = 8.5
     packages = []
     boss = None
@@ -153,7 +153,7 @@ def main():
                 if isinstance(enemy, Enemy):
                     player.health -= 10
                     enemies.remove(enemy)
-                else: lost = True
+                else: lost = True           # player collided with boss
             if isinstance(enemy, Enemy) and enemy.y + enemy.get_height > HEIGHT:
                 invades -= 1
                 enemies.remove(enemy)
