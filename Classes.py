@@ -216,36 +216,7 @@ class Boss(Ship):
                             max(self.height // 2 + 10, min(y, HEIGHT - self.height // 2 - 10)))
         self.x, self.y = self.spawn_point
 
-    def move(self):    #fix boss moving mechanism
-        '''if self.y + self.ship_img.get_height() > HEIGHT:
-            self.y = 400
-        if self.x + self.ship_img.get_width() > WIDTH:
-            self.x = 400
-        self.x += random.choice([-1, 1, 1, 1, 1, 1, 1]) * vel
-        self.y += random.choice([-1, 1, 1, 1, 1, 1, 1]) * vel'''
-
-        '''large_movement_chance = 0.8
-        x_move = random.randint(-10, 10)
-        y_move = random.randint(-10, 10)
-        self.x += x_move
-        self.y += y_move
-        if random.random() < large_movement_chance:
-            # Increase the chance of larger movements by a factor
-            x_move = int(x_move * 9)  # You can adjust the factor here
-            y_move = int(y_move * 9)
-        # Ensure the boss stays within the window boundaries
-        self.x = min(max(self.x, 0), WIDTH - self.ship_img.get_width())
-        self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())'''
-        '''movement_tendency = 0.9
-        distance_from_spawn = ((self.x - self.spawn_point[0]) ** 2 + (self.y - self.spawn_point[1]) ** 2) ** 0.5
-        movement_direction = pygame.math.Vector2(random.uniform(-1, 1), random.uniform(-1, 1))
-        movement_scale = 1 - min(distance_from_spawn / WIDTH, movement_tendency)
-        movement = movement_direction.normalize() * vel
-        self.x += movement.x
-        self.y += movement.y
-        # Ensure the boss stays within the window boundaries
-        self.x = min(max(self.x, 0), WIDTH - self.ship_img.get_width())
-        self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())'''
+    def move(self):
         # Calculate new position using lemniscate equations
         dx = self.width * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
         dy = self.height * math.sin(self.t) * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
