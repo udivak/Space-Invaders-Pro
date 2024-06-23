@@ -201,11 +201,22 @@ class Boss(Ship):
         self.ship_img, self.laser_img = self.COLOR_MAP[color] # -> color
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
+        # Figure-8 movement parameters
+        self.t = 0
+        self.speed = 0.02
+        self.width = 200  # Adjust this for wider/narrower figure-8
+        self.height = 800  # Adjust this for taller/shorter figure-8
 
-        # trying 8 figure movement
+        # Calculate maximum safe dimensions for the figure-8
+        self.width = min(400, WIDTH - self.ship_img.get_width() - 20)
+        self.height = min(200, HEIGHT - self.ship_img.get_height() - 20)
 
+        # Adjust spawn point if necessary to keep figure-8 in bounds
+        self.spawn_point = (max(self.width // 2 + 10, min(x, WIDTH - self.width // 2 - 10)),
+                            max(self.height // 2 + 10, min(y, HEIGHT - self.height // 2 - 10)))
+        self.x, self.y = self.spawn_point
 
-    def move(self, vel):    #fix boss moving mechanism
+    def move(self):    #fix boss moving mechanism
         '''if self.y + self.ship_img.get_height() > HEIGHT:
             self.y = 400
         if self.x + self.ship_img.get_width() > WIDTH:
@@ -225,7 +236,7 @@ class Boss(Ship):
         # Ensure the boss stays within the window boundaries
         self.x = min(max(self.x, 0), WIDTH - self.ship_img.get_width())
         self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())'''
-        movement_tendency = 0.9
+        '''movement_tendency = 0.9
         distance_from_spawn = ((self.x - self.spawn_point[0]) ** 2 + (self.y - self.spawn_point[1]) ** 2) ** 0.5
         movement_direction = pygame.math.Vector2(random.uniform(-1, 1), random.uniform(-1, 1))
         movement_scale = 1 - min(distance_from_spawn / WIDTH, movement_tendency)
@@ -234,7 +245,22 @@ class Boss(Ship):
         self.y += movement.y
         # Ensure the boss stays within the window boundaries
         self.x = min(max(self.x, 0), WIDTH - self.ship_img.get_width())
-        self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())
+        self.y = min(max(self.y, 0), WIDTH - self.ship_img.get_height())'''
+        # Calculate new position using lemniscate equations
+        dx = self.width * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
+        dy = self.height * math.sin(self.t) * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
+
+        # Update position relative to spawn point
+        new_x = self.spawn_point[0] + dx
+        new_y = self.spawn_point[1] + dy
+
+        # Ensure the new position is within the window bounds
+        self.x = max(0, min(new_x, WIDTH - self.ship_img.get_width()))
+        self.y = max(0, min(new_y, HEIGHT - self.ship_img.get_height()))
+
+        # Increment t for the next frame
+        self.t += self.speed
+
     def shoot(self):
         if self.cool_down_counter == 0:
             laser = Laser(self.x + self.ship_img.get_width() / 4, self.y + self.ship_img.get_height() / 2 + 40,
