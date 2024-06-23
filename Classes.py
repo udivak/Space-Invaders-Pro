@@ -11,7 +11,7 @@ WIDTH, HEIGHT = 1000, 850
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 # Sounds
 LASER_SOUND = pygame.mixer.Sound(os.path.join("sounds", "laser-shot.mp3"))
-LASER_SOUND.set_volume(0.085)
+LASER_SOUND.set_volume(0.06)
 TRANCE_LOOP = pygame.mixer.music.load(os.path.join("sounds", "trance-loop.mp3"))
 BOSS_EXPLOSION = pygame.mixer.Sound(os.path.join("sounds", "boss-explosion.mp3"))
 # Load images
