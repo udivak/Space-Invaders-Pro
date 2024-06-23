@@ -1,5 +1,5 @@
 import random
-
+import Classes
 from Classes import *
 
 pygame.init()
@@ -21,7 +21,7 @@ def main():
     enemies = []
     wave_length = 10
     enemy_vel, package_vel = 1, 1.2
-    laser_vel = 10
+    laser_vel = 8
     packages = []
     boss = None
     level_player_collide_triple_shot = 0
@@ -150,7 +150,7 @@ def main():
             else:
                 enemy.move(enemy_vel)
             #if random.randrange(0, 2 * 60) == 1:
-            if random.random() < p_enemy_shoot:
+            if random.randrange(0, 2*60) == 1:
                 enemy.shoot()
             enemy.move_lasers(laser_vel, player)
             if collide(enemy, player):
