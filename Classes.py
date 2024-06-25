@@ -201,23 +201,9 @@ class Boss(Ship):
         self.ship_img, self.laser_img = self.COLOR_MAP[color] # -> color
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
-        # Figure-8 movement parameters
-        self.t = 0
-        self.speed = 0.02
-        self.width = 200  # Adjust this for wider/narrower figure-8
-        self.height = 800  # Adjust this for taller/shorter figure-8
-
-        # Calculate maximum safe dimensions for the figure-8
-        self.width = min(400, WIDTH - self.ship_img.get_width() - 20)
-        self.height = min(200, HEIGHT - self.ship_img.get_height() - 20)
-
-        # Adjust spawn point if necessary to keep figure-8 in bounds
-        self.spawn_point = (max(self.width // 2 + 10, min(x, WIDTH - self.width // 2 - 10)),
-                            max(self.height // 2 + 10, min(y, HEIGHT - self.height // 2 - 10)))
-        self.x, self.y = self.spawn_point
 
     def move(self):
-        # Calculate new position using lemniscate equations
+        ''''# Calculate new position using lemniscate equations
         dx = self.width * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
         dy = self.height * math.sin(self.t) * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
 
@@ -230,7 +216,23 @@ class Boss(Ship):
         self.y = max(0, min(new_y, HEIGHT - self.ship_img.get_height()))
 
         # Increment t for the next frame
-        self.t += self.speed
+        self.t += self.speed'''
+        '''self.x += 1
+        self.y = self.x * math.sin(self.y / 250)
+        if self.x > WIDTH:
+            self.x = 0
+            # self.y = self.y * -1'''
+        amplitude = 100  # Height of the wave
+        frequency = 0.03  # Speed of the wave
+        self.x += 1.75
+        self.y = + amplitude * math.sin(self.x * frequency)
+        if self.x > WIDTH:
+            self.x = 0
+            self.y += 20
+        if self.y > HEIGHT:
+            self.y = 0
+                # self.y = self.y * -1
+        print(self.x, self.y)
 
     def shoot(self):
         if self.cool_down_counter == 0:

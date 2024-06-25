@@ -1,5 +1,4 @@
 import random
-import Classes
 import pygame
 from Classes import *
 
@@ -11,7 +10,7 @@ pygame.mixer.music.set_volume(0.055)
 def main():
     run = True
     FPS = 60
-    level = 0 #10
+    level = 0
     invades = 5
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
@@ -122,12 +121,6 @@ def main():
         if not keys[pygame.K_SPACE]:
             if player.cooldown_meter >= 0:
                 player.cooldown_meter -= 0.6
-        # skip level - testing funcionality
-        if keys[pygame.K_q]:
-            enemies.clear()
-            level = 2
-        if keys[pygame.K_t]:
-            level+=1
 
         for pack in packages:
             pack.move(package_vel)
@@ -152,7 +145,6 @@ def main():
                 enemy.move()
             else:
                 enemy.move(enemy_vel)
-            #if random.randrange(0, 2 * 60) == 1:
             if random.randrange(0, 2*60) == 1:
                 enemy.shoot()
             enemy.move_lasers(laser_vel, player)
