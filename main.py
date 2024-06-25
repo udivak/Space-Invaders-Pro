@@ -63,8 +63,6 @@ def main():
 
         if len(enemies) == 0:   # finished level
             level += 1
-            if level > 1 and invades < 5:
-                invades += 1
             wave_length += 2
             p_enemy_shoot += 0.003
             if level > 1:
@@ -81,6 +79,10 @@ def main():
                             random.choice(['grey']), 400)
                 enemies.append(boss)
             if player.pack_flag['triple_shot']:
+                player.pack_flag['triple_shot'] = False
+            if player.pack_flag['shield']:
+                player.pack_flag['shield'] = False
+            '''if player.pack_flag['triple_shot']:      # keep the package for 2 levels
                 player.pack_duration['triple_shot'] += 1
                 if player.pack_duration['triple_shot'] > 1:
                     player.pack_duration['triple_shot'] = 0
@@ -89,7 +91,7 @@ def main():
                 player.pack_duration['shield'] += 1
                 if player.pack_duration['shield'] > 1:
                     player.pack_duration['shield'] = 0
-                    player.pack_flag['shield'] = False
+                    player.pack_flag['shield'] = False'''
 
         if len(packages) == 0 and level > 2 and level % 2 == 1:
         #if True:
