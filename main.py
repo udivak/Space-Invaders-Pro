@@ -1,5 +1,6 @@
 import random
 import Classes
+import pygame
 from Classes import *
 
 pygame.init()
@@ -157,7 +158,7 @@ def main():
             enemy.move_lasers(laser_vel, player)
             if collide(enemy, player):
                 if isinstance(enemy, Enemy):
-                    player.health -= 5
+                    player.health -= 15
                     enemies.remove(enemy)
                 else: lost = True           # player collided with boss
             if isinstance(enemy, Enemy) and enemy.y + enemy.get_height > HEIGHT:
@@ -166,6 +167,27 @@ def main():
 
         player.move_lasers(-(laser_vel + 3), enemies)
 
+def instructions_screen():
+    instructions_font = pygame.font.SysFont("comicsans", 30)
+    instructions_flag = True
+    instruction_1 = instructions_font.render("~ Use Arrows to move the spaceship ~", 1, (255, 255, 255))
+    instruction_2 = instructions_font.render("~ Press Spacebar to shoot lasers ~", 1, (255, 255, 255))
+    instruction_3 = instructions_font.render("~ Destroy all enemies before they invade your planet ! ~", 1,
+                                             (255, 255, 255))
+    while instructions_flag:
+        WIN.blit(BG, (0, 0))
+        WIN.blit(instruction_1, (WIDTH / 2 - instruction_2.get_width() / 2 - 40, 300))
+        WIN.blit(instruction_2, (WIDTH / 2 - instruction_1.get_width() / 2, 400))
+        WIN.blit(instruction_3, (WIDTH / 2 - instruction_3.get_width() / 2, 500))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                instructions_flag = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pygame.mixer.music.play(-1)
+                main()
+                return
+
 def main_menu():
     title_font = pygame.font.SysFont("comicsans", 30)
     run = True
@@ -173,18 +195,20 @@ def main_menu():
         WIN.blit(BG, (0, 0))
         title_label1 = title_font.render("Welcome to Space Invaders Pro !!!", 1, (255, 255, 255))
         title_label2 = title_font.render("Press the mouse to begin...", 1, (255, 255, 255))
-        title_label3 = title_font.render("~ Use arrows to move, Spacebar to shoot ~", 1, (255, 255, 255))
-        WIN.blit(title_label3, (WIDTH / 2 - title_label3.get_width() / 2, 400))
         WIN.blit(title_label1, (WIDTH / 2 - title_label1.get_width() / 2, 300))
         WIN.blit(title_label2, (WIDTH / 2 - title_label1.get_width() / 2 + 30, 500))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                pygame.quit()
+                #run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                instructions_screen()
+                break
+                '''pygame.display.update()
                 pygame.mixer.music.play(-1)
                 main()
-                break
+                break'''
 
     pygame.quit()
 
