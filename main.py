@@ -20,12 +20,10 @@ def main():
     lost_count = 0
     enemies = []
     wave_length = 10
-    enemy_vel, package_vel = 1, 1.2
+    enemy_vel, package_vel = 1, 1.3
     laser_vel = 10.5
     packages = []
     boss = None
-    level_player_collide_triple_shot = 0
-    p_enemy_shoot = 0.005
     clock = pygame.time.Clock()
     def redraw_window():
         WIN.blit(BG, (0, 0))
@@ -64,7 +62,6 @@ def main():
         if len(enemies) == 0:   # finished level
             level += 1
             wave_length += 2
-            p_enemy_shoot += 0.003
             if level > 1:
                 if player.health < 100 and player.health >= 80:
                     player.health = 100
