@@ -113,16 +113,11 @@ class Player(Ship):
         self.pack_duration = {'triple_shot': 0, 'shield': 0}
         self.triple_shot_counter = 0
     def shoot(self):
-        '''if self.cool_down_counter == 0:
-            laser = Laser(self.x+16, self.y-45, self.laser_img)
-            self.lasers.append(laser)
-            self.cool_down_counter = 1'''
         if self.cooldown_meter < self.ship_img.get_width():
             self.cooldown_meter += 0.35
             if self.cool_down_counter == 0:
                 laser = Laser(self.x + 16, self.y - 45, self.laser_img)
                 LASER_SOUND.play()
-                #LASER_SOUND.play(0, 0,1)
                 self.lasers.append(laser)
                 self.cool_down_counter = 1
     def triple_shot(self):
@@ -203,25 +198,6 @@ class Boss(Ship):
         self.max_health = health
 
     def move(self):
-        ''''# Calculate new position using lemniscate equations
-        dx = self.width * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
-        dy = self.height * math.sin(self.t) * math.cos(self.t) / (1 + math.sin(self.t) ** 2)
-
-        # Update position relative to spawn point
-        new_x = self.spawn_point[0] + dx
-        new_y = self.spawn_point[1] + dy
-
-        # Ensure the new position is within the window bounds
-        self.x = max(0, min(new_x, WIDTH - self.ship_img.get_width()))
-        self.y = max(0, min(new_y, HEIGHT - self.ship_img.get_height()))
-
-        # Increment t for the next frame
-        self.t += self.speed'''
-        '''self.x += 1
-        self.y = self.x * math.sin(self.y / 250)
-        if self.x > WIDTH:
-            self.x = 0
-            # self.y = self.y * -1'''
         amplitude = 100  # Height of the wave
         frequency = 0.03  # Speed of the wave
         self.x += 1.75
@@ -231,8 +207,6 @@ class Boss(Ship):
             self.y += 20
         if self.y > HEIGHT:
             self.y = 0
-                # self.y = self.y * -1
-        print(self.x, self.y)
 
     def shoot(self):
         if self.cool_down_counter == 0:

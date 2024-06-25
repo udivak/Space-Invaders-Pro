@@ -14,14 +14,14 @@ def main():
     invades = 5
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
-    player_vel = 7.2
+    player_vel = 7.4
     player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80)
     lost = False
     lost_count = 0
     enemies = []
     wave_length = 10
     enemy_vel, package_vel = 1, 1.2
-    laser_vel = 8
+    laser_vel = 10.5
     packages = []
     boss = None
     level_player_collide_triple_shot = 0
@@ -94,7 +94,6 @@ def main():
                     player.pack_flag['shield'] = False'''
 
         if len(packages) == 0 and level > 2 and level % 2 == 1:
-        #if True:
             package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['hp', 'triple_laser', 'shield']))
             packages.append(package)
@@ -145,7 +144,7 @@ def main():
                 enemy.move()
             else:
                 enemy.move(enemy_vel)
-            if random.randrange(0, 2*60) == 1:
+            if random.randrange(0, 70) == 1:
                 enemy.shoot()
             enemy.move_lasers(laser_vel, player)
             if collide(enemy, player):
@@ -157,7 +156,7 @@ def main():
                 invades -= 1
                 enemies.remove(enemy)
 
-        player.move_lasers(-(laser_vel + 3), enemies)
+        player.move_lasers(-(laser_vel), enemies)
 
 def instructions_screen():
     instructions_font = pygame.font.SysFont("comicsans", 30)
