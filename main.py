@@ -195,7 +195,7 @@ def main_menu():
         WIN.blit(BG, (0, 0))
         title_label1 = title_font.render("Welcome to Space Invaders Pro !!!", 1, (255, 255, 255))
         title_label2 = title_font.render("Press the mouse to begin...", 1, (255, 255, 255))
-        WIN.blit(title_label1, (WIDTH / 2 - title_label1.get_width() / 2, 300))
+        WIN.blit(title_label1, (WIDTH / 2 - title_label1.get_width() / 2 - 20, 300))
         WIN.blit(title_label2, (WIDTH / 2 - title_label1.get_width() / 2 + 30, 500))
         pygame.display.update()
         for event in pygame.event.get():
@@ -205,10 +205,6 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 instructions_screen()
                 break
-                '''pygame.display.update()
-                pygame.mixer.music.play(-1)
-                main()
-                break'''
 
     pygame.quit()
 
