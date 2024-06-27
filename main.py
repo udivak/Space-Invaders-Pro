@@ -159,6 +159,9 @@ def main():
                 enemies.remove(enemy)
 
         player.move_lasers(-(laser_vel), enemies)
+
+# # # Game Loop # # #
+
 main_font = pygame.font.SysFont("comicsans", 30)
 def game_over(score):
     name = ""
@@ -261,7 +264,7 @@ def main_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                #run = False
+                run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 instructions_screen()
                 break
