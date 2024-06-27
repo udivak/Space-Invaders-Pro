@@ -170,6 +170,7 @@ class Player(Ship):
         super().draw(window)
         self.healthbar(window)
         self.shooting_meter(window)
+
 # Enemy
 class Enemy(Ship):
     COLOR_MAP = {'red': (RED_SPACE_SHIP, ENEMY_RED_LASER),

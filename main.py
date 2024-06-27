@@ -4,7 +4,6 @@ from Classes import *
 
 pygame.init()
 pygame.font.init()
-#background_music = pygame.mixer.music.play(TRANCE_LOOP)
 pygame.mixer.music.set_volume(0.055)
 
 def main():
@@ -15,12 +14,12 @@ def main():
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
     player_vel = 7.4
-    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80)
+    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80,3)
     lost = False
     lost_count = 0
     enemies = []
     wave_length = 10
-    enemy_vel, package_vel = 1, 1.3
+    enemy_vel, package_vel = 1, 1.4
     laser_vel = 10.5
     packages = []
     boss = None
@@ -42,6 +41,7 @@ def main():
         player.draw(WIN)
         if lost:
             lost_label = lost_font.render("Game Over !!!", 1, (0, 150, 255))
+            game_over(player.score)
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
         pygame.display.update()
 
@@ -54,10 +54,11 @@ def main():
             lost_count += 1
 
         if lost:
-            if lost_count >= FPS * 2:
+            game_over(player.score)
+            '''if lost_count >= FPS * 2:
                 run = False
             else:
-                continue
+                continue'''
 
         if len(enemies) == 0:   # finished level
             level += 1
@@ -79,7 +80,7 @@ def main():
                 player.pack_flag['triple_shot'] = False
             if player.pack_flag['shield']:
                 player.pack_flag['shield'] = False
-            '''if player.pack_flag['triple_shot']:      # keep the package for 2 levels
+            '''if player.pack_flag['triple_shot']:              # keep the package for 2 levels
                 player.pack_duration['triple_shot'] += 1
                 if player.pack_duration['triple_shot'] > 1:
                     player.pack_duration['triple_shot'] = 0
@@ -154,6 +155,71 @@ def main():
                 enemies.remove(enemy)
 
         player.move_lasers(-(laser_vel), enemies)
+main_font = pygame.font.SysFont("comicsans", 30)
+def game_over(score):
+    name = ""
+    input_active = True
+    prompt_text = main_font.render("Enter your name :", 1, (255, 255, 255))
+    while input_active:
+        input_text = main_font.render(name, 1, (255, 255, 255))
+        WIN.blit(BG, (0, 0))
+        WIN.blit(prompt_text, (WIDTH / 2 - prompt_text.get_width() / 2 - 200, 150))
+        WIN.blit(input_text, (WIDTH / 2 - input_text.get_width() / 2, 150))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    input_active = False
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+                else:
+                    name += event.unicode
+            pygame.display.update()
+    save_score(name, score)
+    display_scores()
+
+def save_score(name, score):
+    with open('scores.txt', 'a') as file:
+        file.write(f"({name}, {score})\n")
+
+def display_scores():
+    try:
+        with open('scores.txt', 'r') as file:
+            scores = file.readlines()
+        x_offset = 120
+        y_offset = 100
+        WIN.blit(BG, (0, 0))
+        title_text = main_font.render("High Scores", True, (255, 255, 0))
+        return_to_menu = main_font.render("Press the mouse to return to menu", 1, (255, 255, 255))
+        WIN.blit(title_text, (100, 50))
+        WIN.blit(return_to_menu, (WIDTH/2 - return_to_menu.get_width()/2, HEIGHT-100))
+        for score in scores:
+            score_text = main_font.render(score.strip(), True, (255, 255, 255))
+            WIN.blit(score_text, (x_offset, y_offset))
+            y_offset += 40
+            if y_offset > HEIGHT - 130:
+                y_offset = 100
+                x_offset += 200
+        pygame.display.update()
+        # Wait for user to close the window
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    waiting = False
+                    pygame.quit()
+                    return
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    waiting = False
+                    main_menu()
+    except FileNotFoundError:
+        no_scores_text = main_font.render("No scores saved yet.", True, (255, 255, 255))
+        WIN.blit(no_scores_text, (250, 250))
+        pygame.display.flip()
+        return
 
 def instructions_screen():
     instructions_font = pygame.font.SysFont("comicsans", 30)
@@ -162,11 +228,13 @@ def instructions_screen():
     instruction_2 = instructions_font.render("~ Press Spacebar to shoot lasers ~", 1, (255, 255, 255))
     instruction_3 = instructions_font.render("~ Destroy all enemies before they invade your planet ! ~", 1,
                                              (255, 255, 255))
+    instruction_4 = instructions_font.render("Press the mouse the begin...", 1, (255, 255, 255))
     while instructions_flag:
         WIN.blit(BG, (0, 0))
         WIN.blit(instruction_1, (WIDTH / 2 - instruction_2.get_width() / 2 - 40, 300))
         WIN.blit(instruction_2, (WIDTH / 2 - instruction_1.get_width() / 2, 400))
         WIN.blit(instruction_3, (WIDTH / 2 - instruction_3.get_width() / 2, 500))
+        WIN.blit(instruction_4, (WIDTH / 2 - instruction_4.get_width() / 2, 600))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
