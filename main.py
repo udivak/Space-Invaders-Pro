@@ -90,11 +90,12 @@ def main():
                 if player.pack_duration['shield'] > 1:
                     player.pack_duration['shield'] = 0
                     player.pack_flag['shield'] = False'''
-
-        if len(packages) == 0 and level > 2 and level % 2 == 1:
+        package_counter = 0
+        if len(packages) == 0 and package_counter <= 2: #and level % 2 == 1:
             package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
                               random.choice(['hp', 'triple_laser', 'shield']))
             packages.append(package)
+            package_counter += 1
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -126,14 +127,17 @@ def main():
                     if player.health < 100:
                         player.health = 100
                         packages.remove(pack)
+                        package_counter -= 1
                 if not player.pack_flag['triple_shot']:
                     if pack.type == 'triple_laser':
                         player.pack_flag['triple_shot'] = True
                         packages.remove(pack)
+                        package_counter -= 1
                 if not player.pack_flag['shield']:
                     if pack.type == 'shield':
                         player.pack_flag['shield'] = True
                         packages.remove(pack)
+                        package_counter -= 1
             if pack.y + pack.get_height > HEIGHT:
                 packages.remove(pack)
 

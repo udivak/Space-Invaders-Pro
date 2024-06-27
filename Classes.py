@@ -6,8 +6,8 @@ import time
 import random
 pygame.mixer.init()
 # Assets :
-#WIDTH, HEIGHT = 900, 750
-WIDTH, HEIGHT = 1000, 850
+WIDTH, HEIGHT = 900, 750
+#WIDTH, HEIGHT = 800, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 # Sounds
 LASER_SOUND = pygame.mixer.Sound(os.path.join("sounds", "laser-shot.mp3"))
