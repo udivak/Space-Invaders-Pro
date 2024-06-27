@@ -91,8 +91,8 @@ def main():
                     player.pack_duration['shield'] = 0
                     player.pack_flag['shield'] = False'''
         package_counter = 0
-        if len(packages) == 0 and package_counter <= 2: #and level % 2 == 1:
-            package = Package(random.randrange(50, WIDTH - 100), random.randrange(-1500, -100),
+        if len(packages) == 0 and package_counter <= 2:
+            package = Package(random.randrange(50, WIDTH - 100), random.randrange(-500, -100),
                               random.choice(['hp', 'triple_laser', 'shield']))
             packages.append(package)
             package_counter += 1
