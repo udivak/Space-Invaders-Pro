@@ -29,9 +29,8 @@ def main():
         # draw text
         lives_label = main_font.render(f"Invades : {invades}", 1, (255, 0, 0))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
-        level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
         score_label = main_font.render(f"Score : {player.score}", 1, (0, 255, 170))
-        WIN.blit(score_label, (WIDTH / 2 - score_label.get_width() / 2 - 10, 15))
+        WIN.blit(score_label, (WIDTH / 2 - score_label.get_width() / 2 - 10, 10))
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
         for enemy in enemies:
