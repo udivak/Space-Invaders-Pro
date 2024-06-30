@@ -1,4 +1,6 @@
 import random
+import time
+
 import pygame
 from Classes import *
 
@@ -14,7 +16,8 @@ def main():
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
     player_vel = 7.4
-    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80)
+    max_health = 5 #100
+    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80, max_health)
     lost = False
     lost_count = 0
     enemies = []
@@ -26,7 +29,7 @@ def main():
     clock = pygame.time.Clock()
     def redraw_window():
         WIN.blit(BG, (0, 0))
-        # draw text
+        # draw variables
         lives_label = main_font.render(f"Invades : {invades}", 1, (255, 0, 0))
         level_label = main_font.render(f"Level : {level}", 1, (255, 255, 255))
         score_label = main_font.render(f"Score : {player.score}", 1, (0, 255, 170))
@@ -39,9 +42,11 @@ def main():
             pack.draw(WIN)
         player.draw(WIN)
         if lost:
-            lost_label = lost_font.render("Game Over !!!", 1, (0, 150, 255))
+            lost_label = lost_font.render("Game Over !!!", 1, (0, 170, 255))
+            WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, HEIGHT/2 - lost_label.get_height()/2))
+            pygame.display.update()
+            time.sleep(1.5)
             game_over(player.score)
-            WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
         pygame.display.update()
 
     while run:
@@ -51,13 +56,6 @@ def main():
         if invades <= 0 or player.health <= 0 or lost:
             lost = True
             lost_count += 1
-
-        if lost:
-            game_over(player.score)
-            '''if lost_count >= FPS * 2:
-                run = False
-            else:
-                continue'''
 
         if len(enemies) == 0:   # finished level
             level += 1
@@ -198,7 +196,7 @@ def display_scores():
         x_offset = 120
         y_offset = 100
         WIN.blit(BG, (0, 0))
-        title_text = main_font.render("High Scores", True, (255, 255, 0))
+        title_text = main_font.render("Scores List :", True, (255, 255, 0))
         return_to_menu = main_font.render("Press the mouse to return to menu", 1, (255, 255, 255))
         WIN.blit(title_text, (100, 50))
         WIN.blit(return_to_menu, (WIDTH/2 - return_to_menu.get_width()/2, HEIGHT-100))
