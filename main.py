@@ -10,11 +10,13 @@ def main():
     run = True
     FPS = 60
     level = 0
-    invades = 5
+    invades = 20
     main_font = pygame.font.SysFont("comicsans", 30)
     lost_font = pygame.font.SysFont("comicsans", 60)
     player_vel = 7.4
-    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80)
+    max_health = 300
+    player = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80, max_health)
+    # player2 = Player(WIDTH/2 - PLAYER_SHIP.get_width()/2 - 20, HEIGHT - PLAYER_SHIP.get_height() - 80, max_health)
     lost = False
     lost_count = 0
     enemies = []
@@ -53,11 +55,10 @@ def main():
             lost_count += 1
 
         if lost:
-            game_over(player.score)
-            '''if lost_count >= FPS * 2:
+            if lost_count >= FPS * 2:
                 run = False
             else:
-                continue'''
+                continue
 
         if len(enemies) == 0:   # finished level
             level += 1
@@ -123,8 +124,8 @@ def main():
             pack.move(package_vel)
             if collide(pack, player):
                 if pack.type == 'hp':
-                    if player.health < 100:
-                        player.health = 100
+                    if player.health < max_health:
+                        player.health = max_health
                         packages.remove(pack)
                         package_counter -= 1
                 if not player.pack_flag['triple_shot']:
