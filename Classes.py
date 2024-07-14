@@ -6,7 +6,7 @@ import time
 import random
 pygame.mixer.init()
 # Assets :
-WIDTH, HEIGHT = 900, 750
+WIDTH, HEIGHT = 900, 700
 #WIDTH, HEIGHT = 800, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 # Sounds
@@ -21,10 +21,12 @@ GREEN_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - green.png")
 BLUE_SPACE_SHIP = pygame.image.load(os.path.join("assets", "enemy - blue.png"))
 # Player Ship
 PLAYER_SHIP = pygame.image.load(os.path.join("assets", "player.png"))
+PLAYER2_SHIP = pygame.image.load(os.path.join("assets", "player2.png"))
 # Boss Ship
 BOSS_GREY = pygame.image.load(os.path.join("assets", "boss_grey.png"))
 # Lasers
 PLAYER_LASER = pygame.image.load(os.path.join("assets", "player_laser.png"))
+PLAYER2_LASER = pygame.image.load(os.path.join("assets", "player2_laser.png"))
 BOSS_PURPLE_LASER = pygame.image.load(os.path.join("assets", "boss_laser_purple.png"))
 ENEMY_BLUE_LASER = pygame.image.load(os.path.join("assets", "enemy_laser_blue.png"))
 ENEMY_RED_LASER = pygame.image.load(os.path.join("assets", "enemy_laser_red.png"))
@@ -77,15 +79,19 @@ class Ship:
         window.blit(self.ship_img, (self.x, self.y))
         for laser in self.lasers:
             laser.draw(window)
-    def move_lasers(self, vel, obj):
+    def move_lasers(self, vel, players):
         self.cooldown()
         for laser in self.lasers:
             laser.move(vel)
             if laser.off_screen(HEIGHT):
                 self.lasers.remove(laser)
-            elif laser.collision(obj):
-                if not obj.pack_flag['shield']:
-                    obj.health -= 10
+            elif laser.collision(players[0]):
+                if not players[0].pack_flag['shield']:
+                    players[0].health -= 10
+                self.lasers.remove(laser)
+            elif laser.collision(players[1]):
+                if not players[1].pack_flag['shield']:
+                    players[1].health -= 10
                 self.lasers.remove(laser)
     def cooldown(self):
         if self.cool_down_counter >= self.COOLDOWN:
@@ -101,10 +107,14 @@ class Ship:
 
 # Player
 class Player(Ship):
-    def __init__(self, x, y, health=100):
+    def __init__(self, x, y, health=100, id = 1):
         super().__init__(x, y, health)
-        self.ship_img = PLAYER_SHIP
-        self.laser_img = PLAYER_LASER
+        if id == 2:
+            self.ship_img = PLAYER2_SHIP
+            self.laser_img = PLAYER2_LASER
+        else:
+            self.ship_img = PLAYER_SHIP
+            self.laser_img = PLAYER_LASER
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
         self.score = 0
@@ -161,9 +171,6 @@ class Player(Ship):
                                                             self.cooldown_meter, 7))
     def draw(self, window):
         if self.pack_flag['shield']:
-            #window.blit(SHIELD_BUBBLE.subsurface(pygame.draw.rect(window, (0,0,0,), (self.x, self.y,self.ship_img.get_height(),0))),
-            #            (self.x -(SHIELD_BUBBLE.get_width() // 2) + (self.ship_img.get_width() // 2),
-             #            self.y -(SHIELD_BUBBLE.get_height() // 2) + (self.ship_img.get_height() // 2)))
             pygame.draw.circle(window, (169, 169, 169, 0),
                                (self.x + self.ship_img.get_width() // 2 ,self.y + self.ship_img.get_height() // 2),
                                60.5)
