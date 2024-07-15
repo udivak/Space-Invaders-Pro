@@ -74,11 +74,14 @@ def main():
 
         clock.tick(FPS)
         redraw_window()
-
-        if invades <= 0 or players[0].health <= 0 or players[1].health <= 0 or lost:
-            lost = True
-            lost_count += 1
-
+        if player2_flag:
+            if invades <= 0 or players[0].health <= 0 or players[1].health <= 0 or lost:
+                lost = True
+                lost_count += 1
+        else:
+            if invades <= 0 or players[0].health <= 0 or lost:
+                lost = True
+                lost_count += 1
         if len(enemies) == 0:   # finished level
             level += 1
             wave_length += 2

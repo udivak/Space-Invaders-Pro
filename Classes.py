@@ -4,6 +4,7 @@ import math
 import os
 import time
 import random
+import main
 pygame.mixer.init()
 # Assets :
 WIDTH, HEIGHT = 900, 700
@@ -89,10 +90,11 @@ class Ship:
                 if not players[0].pack_flag['shield']:
                     players[0].health -= 10
                 self.lasers.remove(laser)
-            elif laser.collision(players[1]):
-                if not players[1].pack_flag['shield']:
-                    players[1].health -= 10
-                self.lasers.remove(laser)
+            if len(players) == 2:
+                if laser.collision(players[1]):
+                    if not players[1].pack_flag['shield']:
+                        players[1].health -= 10
+                    self.lasers.remove(laser)
     def cooldown(self):
         if self.cool_down_counter >= self.COOLDOWN:
             self.cool_down_counter = 0
@@ -124,7 +126,7 @@ class Player(Ship):
         self.triple_shot_counter = 0
     def shoot(self):
         if self.cooldown_meter < self.ship_img.get_width():
-            self.cooldown_meter += 0.35
+            self.cooldown_meter += 0.45
             if self.cool_down_counter == 0:
                 laser = Laser(self.x + 16, self.y - 45, self.laser_img)
                 LASER_SOUND.play()
