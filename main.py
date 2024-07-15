@@ -313,10 +313,14 @@ def instructions_screen(players):
         instruction_2 = instructions_font.render("Player 2 : Use W,S,A,D to move the spaceship, Press G to Shoot Lasers", 1, (255,140,0))
     while instructions_flag:
         WIN.blit(BG, (0, 0))
-        WIN.blit(instruction_1, (WIDTH / 2 - instruction_2.get_width() / 2 +5, 300))
-        WIN.blit(instruction_2, (WIDTH / 2 - instruction_1.get_width() / 2 -10, 400))
-        WIN.blit(instruction_3, (WIDTH / 2 - instruction_3.get_width() / 2, 500))
-        WIN.blit(instruction_4, (WIDTH / 2 - instruction_4.get_width() / 2, 600))
+        if players == 1:
+            WIN.blit(instruction_1, (WIDTH / 2 - instruction_2.get_width() / 2 -35, 300))
+            WIN.blit(instruction_2, (WIDTH / 2 - instruction_1.get_width() / 2, 400))
+        else:
+            WIN.blit(instruction_1, (WIDTH / 2 - instruction_2.get_width() / 2, 300))
+            WIN.blit(instruction_2, (WIDTH / 2 - instruction_1.get_width() / 2 -10, 400))
+        WIN.blit(instruction_3, (WIDTH / 2 - instruction_3.get_width() / 2 -15, 500))
+        WIN.blit(instruction_4, (WIDTH / 2 - instruction_4.get_width() / 2 -20, 600))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
