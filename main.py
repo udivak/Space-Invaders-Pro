@@ -85,7 +85,7 @@ def main():
         if len(enemies) == 0:   # finished level
             level += 1
             wave_length += 2
-            if level > 1:
+            if invades < 5 and level > 1:
                 invades += 1
             if level > 1:
                 for player in players:
