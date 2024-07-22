@@ -33,7 +33,6 @@ def main():
     boss = None
     clock = pygame.time.Clock()
     def redraw_window():
-        #nonlocal player, player2
         WIN.blit(BG, (0, 0))
         # draw variables
         lives_label = main_font.render(f"Invades : {invades}", 1, (255, 0, 0))
