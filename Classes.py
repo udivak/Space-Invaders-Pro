@@ -43,7 +43,7 @@ SHIELD_BUBBLE = pygame.image.load(os.path.join("assets", "shield.png"))
 
 # Laser :
 class Laser():
-    def __init__(self, x, y, img,triple_flag = False, angle_right_flag = False):
+    def __init__(self, x, y, img, triple_flag = False, angle_right_flag = False):
         self.x = x
         self.y = y
         self.img = img
@@ -80,7 +80,7 @@ class Ship:
         window.blit(self.ship_img, (self.x, self.y))
         for laser in self.lasers:
             laser.draw(window)
-    def move_lasers(self, vel, players):
+    def move_lasers(self, vel, players):        # enemies
         self.cooldown()
         for laser in self.lasers:
             laser.move(vel)
@@ -203,13 +203,12 @@ class Boss(Ship):
     def __init__(self, x, y, color, health = 300):
         super().__init__(x, y, health)
         self.spawn_point = (x, y)
-        self.ship_img, self.laser_img = self.COLOR_MAP[color] # -> color
+        self.ship_img, self.laser_img = self.COLOR_MAP[color]   # -> color
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
-
     def move(self):
-        amplitude = 100  # Height of the wave
-        frequency = 0.03  # Speed of the wave
+        amplitude = 100     # Height of the wave
+        frequency = 0.03    # Speed of the wave
         self.x += 1.75
         self.y = + amplitude * math.sin(self.x * frequency)
         if self.x > WIDTH:
@@ -217,7 +216,6 @@ class Boss(Ship):
             self.y += 20
         if self.y > HEIGHT:
             self.y = 0
-
     def shoot(self):
         if self.cool_down_counter == 0:
             laser = Laser(self.x + self.ship_img.get_width() / 4, self.y + self.ship_img.get_height() / 2 + 40,

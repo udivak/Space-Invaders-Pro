@@ -147,7 +147,7 @@ def main():
             if not keys[pygame.K_SPACE]:
                 if player.cooldown_meter >= 0:
                     player.cooldown_meter -= 0.6
-        def two_player_movement(keys):      # Preset keys for two player
+        def two_players_movement(keys):      # Preset keys for two player
             # Blue Player
             if keys[pygame.K_RIGHT] and players[0].x + player_vel + players[0].get_width < WIDTH:  # right
                 players[0].x += player_vel
@@ -186,7 +186,7 @@ def main():
                     players[1].cooldown_meter -= 0.6
 
         if player2_flag:
-            two_player_movement(keys)
+            two_players_movement(keys)
         else:
             one_player_movement(keys)
 
