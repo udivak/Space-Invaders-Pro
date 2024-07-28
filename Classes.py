@@ -7,7 +7,7 @@ import random
 import main
 pygame.mixer.init()
 # Assets :
-WIDTH, HEIGHT = 900, 700
+WIDTH, HEIGHT = 950, 750
 #WIDTH, HEIGHT = 800, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 # Sounds

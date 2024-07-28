@@ -84,6 +84,8 @@ def main():
         if len(enemies) == 0:   # finished level
             level += 1
             wave_length += 2
+            if len(players) > 1:
+                wave_length += 3
             if invades < 5 and level > 1:
                 invades += 1
             if level > 1:
@@ -297,6 +299,8 @@ def display_scores():
         WIN.blit(no_scores_text, (250, 250))
         pygame.display.flip()
         return
+    except Exception:
+        pass                # ignore exceptions when exiting game
 
 def instructions_screen(players):
     instructions_font = pygame.font.SysFont("comicsans", 24)
