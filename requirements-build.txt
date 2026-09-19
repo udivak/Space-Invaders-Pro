@@ -1,0 +1,3 @@
+-r requirements.txt
+# Pinned to the PyInstaller release current when Task 7.3 was prepared; not yet validated by a native Windows build.
+pyinstaller==6.22.3
