@@ -34,3 +34,10 @@ Scripts/
 
 # VSCode settings (optional)
 .vscode/
+
+# Local environments, caches and build outputs
+.venv/
+.pytest_cache/
+build/
+dist/
+reports/
